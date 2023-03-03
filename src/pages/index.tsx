@@ -6,7 +6,8 @@ export default function Index() {
   const navigate = useNavigate();
 
   const go = () => {
-    if (name) navigate(`/hi/${encodeURIComponent(name)}`);
+    // if (name) navigate(`/hi/${encodeURIComponent(name)}`);
+    if (name) navigate(`/${encodeURIComponent(name)}`);
   };
 
   return (
