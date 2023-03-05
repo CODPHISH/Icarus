@@ -21,6 +21,15 @@ export default function ChatGpt() {
 
   const [isChatting, setIsChatting] = useState(false);
   const [dialogs, setDialogs] = useState<Dialog[]>([]);
+  const [usage, setUsage] = useState({
+    prompt_tokens: 0,
+    completion_tokens: 0,
+    total_tokens: 0
+  });
+
+  const promptTokens = useMemo(() => usage.prompt_tokens, [usage]);
+  const completionTokens = useMemo(() => usage.completion_tokens, [usage]);
+  const totalTokens = useMemo(() => usage.total_tokens, [usage]);
 
   useEffect(() => {
     if (dialogs.length > 0) {
@@ -46,7 +55,12 @@ export default function ChatGpt() {
         body: JSON.stringify({ messages })
       });
       const { data } = await response.json();
-      setDialogs((prev) => [...prev, { role: 'assistant', content: data }]);
+      console.log(data);
+      setDialogs((prev) => [
+        ...prev,
+        { role: 'assistant', content: data.choices[0].message.content }
+      ]);
+      setUsage(data.usage);
     } catch (e) {
       console.error(e);
     }
@@ -77,6 +91,11 @@ export default function ChatGpt() {
 
   const createNewChat = () => {
     setDialogs([]);
+    setUsage({
+      prompt_tokens: 0,
+      completion_tokens: 0,
+      total_tokens: 0
+    });
   };
 
   return (
@@ -136,6 +155,7 @@ export default function ChatGpt() {
             >
               {isDark ? <div className="i-carbon-moon" /> : <div className="i-carbon-sun" />}
             </button>
+            <div>{`p${promptTokens}-c${completionTokens}-t${totalTokens}`}</div>
           </div>
         </div>
       </section>

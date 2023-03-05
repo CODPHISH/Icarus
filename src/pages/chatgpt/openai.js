@@ -17,7 +17,8 @@ async function getCompletion({ messages }) {
   return await openai.createChatCompletion(
     {
       model: 'gpt-3.5-turbo',
-      messages: [{ role: 'system', content: 'You are a helpful assistant' }, ...messages]
+      messages: messages,
+      stream: false
     },
     {
       httpsAgent: httpsAgent
@@ -36,7 +37,9 @@ app.use(cors());
 
 app.post('/api/chat', (req, res) => {
   getCompletion(req.body).then((response) => {
-    res.json({ data: response.data.choices[0].message.content });
+    res.json({
+      data: response.data
+    });
   });
 });
 
