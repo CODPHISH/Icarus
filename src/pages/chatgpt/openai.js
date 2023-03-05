@@ -1,22 +1,45 @@
-import { Configuration, OpenAIApi } from 'openai';
+const { Configuration, OpenAIApi } = require('openai');
+const tunnel = require('tunnel');
 const configuration = new Configuration({
   organization: 'org-RwVWSB9WuLFG6SAdvkz1jA7f',
-  apiKey: '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'
+  apiKey: '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'
 });
 const openai = new OpenAIApi(configuration);
 
-async function getModels() {
-  const response = await openai.listModels();
-  console.log(response.data);
+const httpsAgent = tunnel.httpsOverHttp({
+  proxy: {
+    host: '127.0.0.1',
+    port: 10809
+  }
+});
+
+async function getCompletion({ messages }) {
+  return await openai.createChatCompletion(
+    {
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'system', content: 'You are a helpful assistant' }, ...messages]
+    },
+    {
+      httpsAgent: httpsAgent
+    }
+  );
 }
 
-async function getCompletion() {
-  const response = await openai.createCompletion({
-    model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: 'Hello!' }]
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const app = express();
+const port = 3000;
+app.use(bodyParser.json());
+app.use(cors());
+
+app.post('/api/chat', (req, res) => {
+  getCompletion(req.body).then((response) => {
+    res.json({ data: response.data.choices[0].message.content });
   });
-  console.log(response.choices[0].messages.content);
-}
+});
 
-getModels();
-getCompletion();
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});

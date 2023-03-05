@@ -1,3 +1,4 @@
+import { handler } from '@unocss/preset-mini/utils';
 import {
   defineConfig,
   presetAttributify,
@@ -8,6 +9,14 @@ import {
 } from 'unocss';
 
 export default defineConfig({
+  rules: [
+    [
+      /^bg-gradient-(?:repeating-)?linear-(.+)$/,
+      ([, s]) => ({
+        'background-image': `linear-gradient${handler.bracket(s)}`
+      })
+    ]
+  ],
   shortcuts: [
     [
       'btn',
