@@ -54,8 +54,7 @@ export default function ChatGpt() {
         },
         body: JSON.stringify({ messages })
       });
-      const { data } = await response.json();
-      console.log(data);
+      const data = await response.json();
       setDialogs((prev) => [
         ...prev,
         { role: 'assistant', content: data.choices[0].message.content }
@@ -146,7 +145,7 @@ export default function ChatGpt() {
           </form>
           <div className="px-3 pt-2 pb-3 md:px-4 md:pt-3 md:pb-6 flex justify-center items-end">
             <div className="text-xs text-black/50 dark:text-white/50">
-              Powered by OpenAI-GPT3.5 Model, Made by XY
+              Powered by OpenAI-GPT3.5 Model, Made by XueYang
             </div>
             <button
               className="icon-btn mx-2 !outline-none"
