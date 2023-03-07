@@ -21,15 +21,16 @@ export default function ChatGpt() {
 
   const [isChatting, setIsChatting] = useState(false);
   const [dialogs, setDialogs] = useState<Dialog[]>([]);
-  const [usage, setUsage] = useState({
-    prompt_tokens: 0,
-    completion_tokens: 0,
-    total_tokens: 0
-  });
+  // const [usage, setUsage] = useState({
+  //   prompt_tokens: 0,
+  //   completion_tokens: 0,
+  //   total_tokens: 0
+  // });
+  const [content, setContent] = useState('');
 
-  const promptTokens = useMemo(() => usage.prompt_tokens, [usage]);
-  const completionTokens = useMemo(() => usage.completion_tokens, [usage]);
-  const totalTokens = useMemo(() => usage.total_tokens, [usage]);
+  // const promptTokens = useMemo(() => usage.prompt_tokens, [usage]);
+  // const completionTokens = useMemo(() => usage.completion_tokens, [usage]);
+  // const totalTokens = useMemo(() => usage.total_tokens, [usage]);
 
   useEffect(() => {
     if (dialogs.length > 0) {
@@ -42,31 +43,21 @@ export default function ChatGpt() {
   useEffect(() => {
     if (dialogs[dialogs.length - 1]?.role === 'user') {
       fetchChatCompletion(dialogs);
-      // eventChatCompletion();
     }
   }, [dialogs]);
 
-  // useEffect(() => {
-  //   debugger
-  //   const eventSource = new EventSource('http://localhost:3000/api/chat');
-  //   eventSource.onmessage = (e) => {
-  //     const data = JSON.parse(e.data);
-  //     setDialogs((prev) => [...prev, { role: 'assistant', content: data.choices[0].message.content }]);
-  //   };
-  //   return () => {
-  //     eventSource.close();
-  //   };
-  // }, [dialogs]);
-
-  // const eventChatCompletion = () => {
-  //   debugger
-  //   const eventSource = new EventSource('http://localhost:3000/api/chat');
-  //   eventSource.onmessage = (e) => {
-  //     debugger
-  //     const data = JSON.parse(e.data);
-  //     setDialogs((prev) => [...prev, { role: 'assistant', content: data.choices[0].message.content }]);
-  //   };
-  // }
+  useEffect(() => {
+    if (content) {
+      setDialogs((prev) => {
+        const lastDialog = prev[prev.length - 1];
+        if (lastDialog.role === 'assistant') {
+          return prev.slice(0, -1).concat({ ...lastDialog, content: content });
+        } else {
+          return prev.concat({ role: 'assistant', content });
+        }
+      });
+    }
+  }, [content]);
 
   const fetchChatCompletion = async (messages: Dialog[]) => {
     try {
@@ -80,33 +71,16 @@ export default function ChatGpt() {
 
       const reader = response.body!.getReader();
       const decoder = new TextDecoder('utf-8');
-      let data = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
+          setContent('');
           break;
         }
         if (value) {
-          data += decoder.decode(value);
-          // const result = data.match(/data: (.*)\n\n/);
-          // if (result && result.length > 1) {
-          //   data = '';
-          //   const dataJson = JSON.parse(result[1]);
-
-          //   console.log(dataJson.choices[0].delta?.content)
-
-          // }
+          setContent((prev) => prev + decoder.decode(value));
         }
       }
-
-      // const data = await response.json();
-      // setDialogs((prev) => [
-      //   ...prev,
-      //   { role: 'assistant', content: data.choices[0].message.content }
-      // ]);
-      // setUsage(data.usage);
-
-      console.log(data);
     } catch (e) {
       console.error(e);
     }
@@ -137,11 +111,11 @@ export default function ChatGpt() {
 
   const createNewChat = () => {
     setDialogs([]);
-    setUsage({
-      prompt_tokens: 0,
-      completion_tokens: 0,
-      total_tokens: 0
-    });
+    // setUsage({
+    //   prompt_tokens: 0,
+    //   completion_tokens: 0,
+    //   total_tokens: 0
+    // });
   };
 
   return (
@@ -167,7 +141,7 @@ export default function ChatGpt() {
           {isChatting ? (
             dialogs.map((dialog, index) => <ChatDialog key={index} dialog={dialog} />)
           ) : (
-            <div>ChatGPT Hello</div>
+            <div className="my-auto">在聊天框输入内容，开始你的对话吧！</div>
           )}
           <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
         </div>
@@ -201,7 +175,6 @@ export default function ChatGpt() {
             >
               {isDark ? <div className="i-carbon-moon" /> : <div className="i-carbon-sun" />}
             </button>
-            <div>{`p${promptTokens}-c${completionTokens}-t${totalTokens}`}</div>
           </div>
         </div>
       </section>
