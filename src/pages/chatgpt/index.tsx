@@ -42,8 +42,31 @@ export default function ChatGpt() {
   useEffect(() => {
     if (dialogs[dialogs.length - 1]?.role === 'user') {
       fetchChatCompletion(dialogs);
+      // eventChatCompletion();
     }
   }, [dialogs]);
+
+  // useEffect(() => {
+  //   debugger
+  //   const eventSource = new EventSource('http://localhost:3000/api/chat');
+  //   eventSource.onmessage = (e) => {
+  //     const data = JSON.parse(e.data);
+  //     setDialogs((prev) => [...prev, { role: 'assistant', content: data.choices[0].message.content }]);
+  //   };
+  //   return () => {
+  //     eventSource.close();
+  //   };
+  // }, [dialogs]);
+
+  // const eventChatCompletion = () => {
+  //   debugger
+  //   const eventSource = new EventSource('http://localhost:3000/api/chat');
+  //   eventSource.onmessage = (e) => {
+  //     debugger
+  //     const data = JSON.parse(e.data);
+  //     setDialogs((prev) => [...prev, { role: 'assistant', content: data.choices[0].message.content }]);
+  //   };
+  // }
 
   const fetchChatCompletion = async (messages: Dialog[]) => {
     try {
@@ -54,12 +77,36 @@ export default function ChatGpt() {
         },
         body: JSON.stringify({ messages })
       });
-      const data = await response.json();
-      setDialogs((prev) => [
-        ...prev,
-        { role: 'assistant', content: data.choices[0].message.content }
-      ]);
-      setUsage(data.usage);
+
+      const reader = response.body!.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let data = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        if (value) {
+          data += decoder.decode(value);
+          // const result = data.match(/data: (.*)\n\n/);
+          // if (result && result.length > 1) {
+          //   data = '';
+          //   const dataJson = JSON.parse(result[1]);
+
+          //   console.log(dataJson.choices[0].delta?.content)
+
+          // }
+        }
+      }
+
+      // const data = await response.json();
+      // setDialogs((prev) => [
+      //   ...prev,
+      //   { role: 'assistant', content: data.choices[0].message.content }
+      // ]);
+      // setUsage(data.usage);
+
+      console.log(data);
     } catch (e) {
       console.error(e);
     }
