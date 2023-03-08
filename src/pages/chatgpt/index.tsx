@@ -1,5 +1,5 @@
-import 'highlight.js/styles/atom-one-dark.css';
 import '@/styles/markdown.css';
+import 'highlight.js/styles/atom-one-dark.css';
 
 import { t } from '@lingui/macro';
 import ReactMarkdown from 'react-markdown';
