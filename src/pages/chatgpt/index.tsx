@@ -1,4 +1,11 @@
+import 'highlight.js/styles/atom-one-dark.css';
+import '@/styles/markdown.css';
+
 import { t } from '@lingui/macro';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
+import remarkToc from 'remark-toc';
 
 import { useDark } from '@/hooks';
 
@@ -21,16 +28,8 @@ export default function ChatGpt() {
 
   const [isChatting, setIsChatting] = useState(false);
   const [dialogs, setDialogs] = useState<Dialog[]>([]);
-  // const [usage, setUsage] = useState({
-  //   prompt_tokens: 0,
-  //   completion_tokens: 0,
-  //   total_tokens: 0
-  // });
-  const [content, setContent] = useState('');
 
-  // const promptTokens = useMemo(() => usage.prompt_tokens, [usage]);
-  // const completionTokens = useMemo(() => usage.completion_tokens, [usage]);
-  // const totalTokens = useMemo(() => usage.total_tokens, [usage]);
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (dialogs.length > 0) {
@@ -103,7 +102,15 @@ export default function ChatGpt() {
           ) : (
             <div className="i-carbon-chat-bot mr-5 mt-0.5"></div>
           )}
-          <div className="flex-1 text-left">{dialog.content}</div>
+          <div className="flex-1 text-left overflow-auto">
+            <ReactMarkdown
+              className="markdown"
+              remarkPlugins={[remarkGfm, remarkToc]}
+              rehypePlugins={[rehypeHighlight]}
+            >
+              {dialog.content}
+            </ReactMarkdown>
+          </div>
         </div>
       </div>
     );
@@ -111,11 +118,6 @@ export default function ChatGpt() {
 
   const createNewChat = () => {
     setDialogs([]);
-    // setUsage({
-    //   prompt_tokens: 0,
-    //   completion_tokens: 0,
-    //   total_tokens: 0
-    // });
   };
 
   return (
