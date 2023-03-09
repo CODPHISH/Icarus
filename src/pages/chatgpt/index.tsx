@@ -60,7 +60,7 @@ export default function ChatGpt() {
 
   const fetchChatCompletion = async (messages: Dialog[]) => {
     try {
-      const response = await fetch('http://localhost:3000/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

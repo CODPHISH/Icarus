@@ -40,5 +40,18 @@ export default defineConfig({
   // https://github.com/vitest-dev/vitest
   test: {
     environment: 'jsdom'
+  },
+
+  server: {
+    proxy: {
+      '/api': {
+        target:
+          process.env.NODE_ENV === 'production'
+            ? 'https://chat-server-sepia.vercel.app'
+            : 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
   }
 });
