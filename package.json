@@ -108,8 +108,5 @@
     "*.md": [
       "prettier --write"
     ]
-  },
-  "engines": {
-    "node": ">=14"
   }
 }

@@ -1,20 +1,13 @@
-// const tunnel = require('tunnel');
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { Configuration, OpenAIApi } from 'openai';
 
-// const agent = tunnel.httpsOverHttp({
-//   proxy: {
-//     host: '127.0.0.1',
-//     port: 10809
-//   }
-// });
-
-const { Configuration, OpenAIApi } = require('openai');
 const configuration = new Configuration({
   organization: 'org-RwVWSB9WuLFG6SAdvkz1jA7f',
   apiKey: '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'
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { messages } = req.body;
   const response = await openai.createChatCompletion(
     {
@@ -26,7 +19,6 @@ export default async function handler(req, res) {
     },
     {
       responseType: 'stream'
-      // httpsAgent: agent
     }
   );
 
@@ -37,6 +29,7 @@ export default async function handler(req, res) {
   });
 
   let message = '';
+
   response.data.on('data', (chunk) => {
     const result = chunk.toString().match(/data: (.*)\n\n/);
     if (result && result[1] !== '[DONE]') {
