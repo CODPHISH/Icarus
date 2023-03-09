@@ -18,6 +18,7 @@
     "@lingui/react": "^3.14.0",
     "@types/markdown-it": "^12.2.3",
     "@types/three": "^0.149.0",
+    "@vercel/node": "^2.9.12",
     "highlight.js": "^11.7.0",
     "openai": "^3.2.1",
     "prismjs": "^1.29.0",

@@ -49,8 +49,7 @@ export default defineConfig({
           process.env.NODE_ENV === 'production'
             ? 'https://chat-server-sepia.vercel.app'
             : 'http://localhost:3000',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        changeOrigin: true
       }
     }
   }
