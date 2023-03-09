@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Configuration, OpenAIApi } from 'openai';
 
 const configuration = new Configuration({
@@ -7,7 +6,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   const { messages } = req.body;
   const response = await openai.createChatCompletion(
     {
@@ -38,6 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (content) {
         message += content;
         res.write(content);
+        res.flush();
       }
     }
   });
