@@ -96,7 +96,7 @@ export default function ChatGpt() {
   const ChatDialog = ({ dialog }: { dialog: Dialog }) => {
     return (
       <div className={`${dialog.role === 'assistant' && 'bg-#f7f7f8 dark:bg-#444653'}`}>
-        <div className="flex m-auto md:max-w-2xl xl:max-w-3xl py-5 justify-start items-start">
+        <div className="flex mx-2 md:m-auto md:max-w-2xl xl:max-w-3xl py-5 justify-start items-start">
           {dialog.role === 'user' ? (
             <div className="i-carbon-user-avatar mr-5 mt-0.5"></div>
           ) : (
@@ -122,7 +122,18 @@ export default function ChatGpt() {
 
   return (
     <div className="flex h-100vh">
-      <aside className="w-260px bg-#202123 text-white p-2">
+      <div
+        role="button"
+        tabIndex={-1}
+        onClick={() => {
+          createNewChat();
+        }}
+        onKeyDown={(e) => {
+          e.key === 'n' && createNewChat();
+        }}
+        className="i-carbon-restart md:hidden absolute bottom-25 right-2 z-1"
+      ></div>
+      <aside className="hidden md:block md:w-260px bg-#202123 text-white p-2">
         <div
           role="button"
           tabIndex={0}
@@ -147,8 +158,8 @@ export default function ChatGpt() {
           )}
           <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
         </div>
-        <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 md:border-transparent md:dark:border-transparent dark:border-white/20 bg-transparent bg-gradient-linear-[(180deg,hsla(0,0%,100%,0)_13.94%,#fff_54.73%)]  dark:bg-gradient-linear-[(180deg,rgba(53,55,64,0),#353740_58.85%)]">
-          <form className="flex gap-3 pt-30 w-3xl mx-auto">
+        <div className="absolute bottom-0 left-0 w-full border-t-0 md:border-t-0 md:border-transparent md:dark:border-transparent dark:border-white/20 bg-transparent bg-gradient-linear-[(180deg,hsla(0,0%,100%,0)_13.94%,#fff_54.73%)]  dark:bg-gradient-linear-[(180deg,rgba(53,55,64,0),#353740_58.85%)]">
+          <form className="flex gap-3 pt-30 w-sm sm:w-lg md:w-xl lg:w-2xl xl:w-3xl w-200px mx-auto">
             <div className="relative flex flex-col flex-grow w-full py-3 pl-2 border border-black/10 dark:border-gray-900/50 dark:text-white dark:bg-#40414f rounded-md shadow-md">
               <textarea
                 ref={textareaRef}
