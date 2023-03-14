@@ -18,6 +18,7 @@ msgid "Home"
 msgstr "Home"
 
 #: src/components/Footer.tsx:25
+#: src/pages/chatgpt/index.tsx:175
 msgid "Toggle dark mode"
 msgstr "Toggle dark mode"
 
@@ -30,26 +31,17 @@ msgid "Not Found"
 msgstr "Not Found"
 
 #: src/pages/[...all].tsx:14
-#: src/pages/hi/[name].tsx:20
 msgid "Back"
 msgstr "Back"
 
-#: src/pages/hi/[name].tsx:11
-msgid "Hi, {0}"
-msgstr "Hi, {0}"
+#: src/pages/index.tsx:23
+msgid "Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom"
+msgstr "Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom"
 
-#: src/pages/hi/[name].tsx:15
-msgid "Dynamic route!"
-msgstr "Dynamic route!"
+#: src/pages/index.tsx:29
+msgid "What's your API-KEY?"
+msgstr "What's your API-KEY?"
 
-#: src/pages/index.tsx:22
-msgid "Opinionated Vite Starter Template"
-msgstr "Opinionated Vite Starter Template"
-
-#: src/pages/index.tsx:28
-msgid "What's your name?"
-msgstr "What's your name?"
-
-#: src/pages/index.tsx:42
+#: src/pages/index.tsx:39
 msgid "Go"
 msgstr "Go"

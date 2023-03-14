@@ -18,6 +18,7 @@ msgid "Home"
 msgstr "ホーム"
 
 #: src/components/Footer.tsx:25
+#: src/pages/chatgpt/index.tsx:175
 msgid "Toggle dark mode"
 msgstr "ダークモード切り替え"
 
@@ -30,26 +31,17 @@ msgid "Not Found"
 msgstr "見つかりませんでした"
 
 #: src/pages/[...all].tsx:14
-#: src/pages/hi/[name].tsx:20
 msgid "Back"
 msgstr "戻る"
 
-#: src/pages/hi/[name].tsx:11
-msgid "Hi, {0}"
-msgstr "こんにちは、{0}!"
+#: src/pages/index.tsx:23
+msgid "Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom"
+msgstr "未知の世界を探索し，知識の海を旅する"
 
-#: src/pages/hi/[name].tsx:15
-msgid "Dynamic route!"
-msgstr "動的ルートのデモ"
+#: src/pages/index.tsx:29
+msgid "What's your API-KEY?"
+msgstr ""
 
-#: src/pages/index.tsx:22
-msgid "Opinionated Vite Starter Template"
-msgstr "固執された Vite スターターテンプレート"
-
-#: src/pages/index.tsx:28
-msgid "What's your name?"
-msgstr "君の名は。"
-
-#: src/pages/index.tsx:42
+#: src/pages/index.tsx:39
 msgid "Go"
 msgstr "進む"

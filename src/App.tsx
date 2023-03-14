@@ -21,7 +21,7 @@ export default function App() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <I18nProvider i18n={i18n}>
-        <main text="center gray-700 dark:gray-200">{useRoutes(routes)}</main>
+        <main className="text-center text-gray-700 dark:text-gray-200">{useRoutes(routes)}</main>
       </I18nProvider>
     </Suspense>
   );

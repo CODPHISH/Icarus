@@ -18,6 +18,7 @@ msgid "Home"
 msgstr "首页"
 
 #: src/components/Footer.tsx:25
+#: src/pages/chatgpt/index.tsx:175
 msgid "Toggle dark mode"
 msgstr "切换深色模式"
 
@@ -30,26 +31,17 @@ msgid "Not Found"
 msgstr "未找到页面"
 
 #: src/pages/[...all].tsx:14
-#: src/pages/hi/[name].tsx:20
 msgid "Back"
 msgstr "返回"
 
-#: src/pages/hi/[name].tsx:11
-msgid "Hi, {0}"
-msgstr "你好，{0}"
+#: src/pages/index.tsx:23
+msgid "Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom"
+msgstr "探寻未知世界，畅游智慧海洋"
 
-#: src/pages/hi/[name].tsx:15
-msgid "Dynamic route!"
-msgstr "动态路由演示"
+#: src/pages/index.tsx:29
+msgid "What's your API-KEY?"
+msgstr "请输入你的 API-KEY"
 
-#: src/pages/index.tsx:22
-msgid "Opinionated Vite Starter Template"
-msgstr "固执己见的 Vite 项目模板"
-
-#: src/pages/index.tsx:28
-msgid "What's your name?"
-msgstr "输入你的名字"
-
-#: src/pages/index.tsx:42
+#: src/pages/index.tsx:39
 msgid "Go"
 msgstr "确定"
