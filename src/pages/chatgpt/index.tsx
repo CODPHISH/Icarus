@@ -21,6 +21,7 @@ export default function ChatGpt() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [apiKey, setApiKey] = useState('');
   const [models, setModels] = useState([]);
+  const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
 
   const { isDark, toggleDark } = useDark();
 
@@ -127,6 +128,10 @@ export default function ChatGpt() {
     }
   };
 
+  const handleModelClick = (model: string) => {
+    setCurrentModel(model);
+  };
+
   const ChatDialog = ({ dialog }: { dialog: Dialog }) => {
     return dialog.role === 'user' ? (
       <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-start self-start">
@@ -163,15 +168,17 @@ export default function ChatGpt() {
         role="button"
         tabIndex={0}
         onClick={() => {
-          createNewChat();
+          handleModelClick(model.id);
         }}
         onKeyDown={(e) => {
-          e.key === 'n' && createNewChat();
+          e.key === 'n' && handleModelClick(model.id);
         }}
-        className="border rd-5 border-white/20 flex items-center gap-3 p-5 hover:border-amber focus:bg-amber focus:text-black transition-colors duration-200 cursor-pointer text-sm mt-10 mx-10"
+        className={`${
+          model.id === currentModel ? 'bg-amber text-black' : 'bg-transparent'
+        } border rd-5 border-white/20 flex items-center gap-2 p-5 hover:border-amber  transition-colors duration-200 cursor-pointer text-sm mx-10`}
       >
         <div className="i-carbon-aperture text-4" />
-        <div className="truncate">{model.id}</div>
+        <div className="truncate w-30">{model.id}</div>
         <div className="i-carbon-next-filled text-4 ml-auto" />
       </div>
     );
@@ -199,8 +206,8 @@ export default function ChatGpt() {
           {isDark ? <div className="i-carbon-moon" /> : <div className="i-carbon-sun" />}
         </button>
       </header>
-      <aside className="scroll-area row-span-1 bg-#000 text-white rd-bl-10 overflow-auto">
-        <div>
+      <aside className="scroll-area relative row-span-1 bg-#000 text-white rd-bl-10 overflow-auto">
+        <div className="flex flex-col gap-10 my-10">
           {models.map((model, index) => (
             <ModelButton key={index} model={model} />
           ))}
@@ -266,6 +273,13 @@ export default function ChatGpt() {
               </button>
             </div>
           </div>
+
+          <button
+            className="i-carbon-new-tab text-10 text-white absolute bottom-0 right-0 mr-10 mb-10"
+            onClick={() => {
+              createNewChat;
+            }}
+          ></button>
         </div>
       </section>
     </div>

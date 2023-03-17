@@ -34,6 +34,7 @@
     "remark-toc": "^8.0.1",
     "three": "^0.149.0",
     "ts-node": "^10.0.0",
+    "tunnel": "^0.0.6",
     "usehooks-ts": "^2.6.0"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/tunnel": "^0.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "@unocss/reset": "^0.44.3",

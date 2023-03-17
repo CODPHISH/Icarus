@@ -1,7 +1,15 @@
+import 'perfect-scrollbar/css/perfect-scrollbar.css';
+
 import PerfectScrollbar from 'perfect-scrollbar';
 
 export const useScroll = () => {
+  const [ps, setPs] = useState<PerfectScrollbar | null>(null);
+
   useEffect(() => {
-    new PerfectScrollbar('.scroll-area', {});
+    setPs(new PerfectScrollbar('.scroll-area', {}));
   }, []);
+
+  return {
+    ps
+  };
 };
