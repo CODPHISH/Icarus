@@ -23,6 +23,7 @@
     "eventsource-parser": "^0.1.0",
     "highlight.js": "^11.7.0",
     "openai": "^3.2.1",
+    "perfect-scrollbar": "^1.5.5",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
