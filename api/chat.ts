@@ -4,14 +4,14 @@ export const config = {
   runtime: 'edge'
 };
 
-async function OpenAIStream(payload: any) {
+async function OpenAIStream(apiKey: string, payload: any) {
   const encoder = new TextEncoder();
   const decoder = new TextDecoder('utf-8');
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer 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'
+      Authorization: `Bearer ${apiKey}`
     },
     method: 'POST',
     body: JSON.stringify(payload)
@@ -48,18 +48,32 @@ async function OpenAIStream(payload: any) {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  const { messages } = await req.json();
+  const { apiKey, messages } = await req.json();
 
-  const payload = {
-    model: 'gpt-3.5-turbo',
-    messages: messages.slice(Math.max(messages.length - 5, 0)),
-    stream: true,
-    temperature: 1,
-    max_tokens: 2048
-  };
-
-  const stream = await OpenAIStream(payload);
-  return new Response(stream);
+  if (!apiKey) {
+    const payload = {
+      model: 'gpt-3.5-turbo',
+      messages: messages.slice(Math.max(messages.length - 3, 0)),
+      stream: true,
+      temperature: 1,
+      max_tokens: 100
+    };
+    const stream = await OpenAIStream(
+      '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',
+      payload
+    );
+    return new Response(stream);
+  } else {
+    const payload = {
+      model: 'gpt-3.5-turbo',
+      messages: messages,
+      stream: true,
+      temperature: 1,
+      max_tokens: 4090
+    };
+    const stream = await OpenAIStream(apiKey, payload);
+    return new Response(stream);
+  }
 };
 
 export default handler;

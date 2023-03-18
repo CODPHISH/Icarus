@@ -32,6 +32,8 @@ export default function ChatGpt() {
 
   const [content, setContent] = useState('');
 
+  const [auth, setAuth] = useState(false);
+
   useEffect(() => {
     fetchModelList();
   }, []);
@@ -88,7 +90,7 @@ export default function ChatGpt() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ messages })
+        body: JSON.stringify({ apiKey, messages })
       });
 
       const reader = response.body!.getReader();
@@ -120,9 +122,9 @@ export default function ChatGpt() {
     if (apiKey) {
       axios.get('/api/verify', { params: { apiKey } }).then((res) => {
         if (res.data.code === 200) {
-          go();
+          setAuth(true);
         } else {
-          alert('Invalid API-KEY');
+          alert('API-KEY无效');
         }
       });
     }
@@ -218,7 +220,8 @@ export default function ChatGpt() {
       </aside>
 
       <section className="row-span-1  border-2 border-black rd-br-10 bg-#20232b flex overflow-auto">
-        <div className="mt-10 ml-100 p-5 rd-t-5 relative flex-1 flex flex-col items-stretch overflow-hidden bg-white dark:bg-#1d1e24">
+        <div className="mt-10 w-100"></div>
+        <div className="mt-10 p-5 rd-t-5 relative flex-1 flex flex-col items-stretch overflow-hidden bg-white dark:bg-#1d1e24">
           <div className="relative flex-1 flex flex-col overflow-hidden gap-5">
             <SimpleBar style={{ maxHeight: '100%', padding: '0 10px' }}>
               {isChatting ? (
@@ -263,20 +266,36 @@ export default function ChatGpt() {
               </em>
             </p>
             <div className="py-4" />
-            <input
-              id="input"
-              placeholder={t`What's your API-KEY?`}
-              type="text"
-              autoComplete="false"
-              className="px-4 py-2 w-250px text-center bg-transparent outline-none active:outline-none"
-              border="~ rounded gray-200 dark:gray-700"
-              onChange={(e) => setApiKey(e.target.value)}
-              onKeyDown={({ key }) => key === 'Enter' && handleVerify()}
-            />
+            {auth ? (
+              <em className="text-green">{'已认证'}</em>
+            ) : (
+              <input
+                id="input"
+                placeholder={t`What's your API-KEY?`}
+                type="text"
+                autoComplete="false"
+                className="px-4 py-2 w-250px text-center bg-transparent outline-none active:outline-none"
+                border="~ rounded gray-200 dark:gray-700"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                onKeyDown={({ key }) => key === 'Enter' && handleVerify()}
+              />
+            )}
+
             <div>
-              <button className="m-5 text-sm btn" disabled={!apiKey} onClick={() => handleVerify()}>
-                <Trans>Go</Trans>
-              </button>
+              {auth ? (
+                <button className="m-5 text-sm btn" onClick={() => setAuth(false)}>
+                  <Trans>更换API-KEY</Trans>
+                </button>
+              ) : (
+                <button
+                  className="m-5 text-sm btn"
+                  disabled={!apiKey}
+                  onClick={() => handleVerify()}
+                >
+                  <Trans>Go</Trans>
+                </button>
+              )}
             </div>
           </div>
 
