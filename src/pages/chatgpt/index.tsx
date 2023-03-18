@@ -1,5 +1,7 @@
 import '@/styles/markdown.css';
 import 'highlight.js/styles/atom-one-dark.css';
+import 'simplebar-react/dist/simplebar.min.css';
+import '@/styles/scrollbar.css';
 
 import { t, Trans } from '@lingui/macro';
 import axios from 'axios';
@@ -7,9 +9,9 @@ import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import remarkToc from 'remark-toc';
+import SimpleBar from 'simplebar-react';
 
 import { useDark } from '@/hooks';
-import { useScroll } from '@/hooks';
 
 type Dialog = {
   role: 'user' | 'assistant';
@@ -24,8 +26,6 @@ export default function ChatGpt() {
   const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
 
   const { isDark, toggleDark } = useDark();
-
-  useScroll();
 
   const [isChatting, setIsChatting] = useState(false);
   const [dialogs, setDialogs] = useState<Dialog[]>([]);
@@ -206,22 +206,28 @@ export default function ChatGpt() {
           {isDark ? <div className="i-carbon-moon" /> : <div className="i-carbon-sun" />}
         </button>
       </header>
-      <aside className="scroll-area relative row-span-1 bg-#000 text-white rd-bl-10 overflow-auto">
-        <div className="flex flex-col gap-10 my-10">
-          {models.map((model, index) => (
-            <ModelButton key={index} model={model} />
-          ))}
-        </div>
+
+      <aside className="relative row-span-1 bg-#000 text-white rd-bl-10 overflow-hidden">
+        <SimpleBar style={{ maxHeight: '100%' }}>
+          <div className="flex flex-col gap-10 my-10">
+            {models.map((model, index) => (
+              <ModelButton key={index} model={model} />
+            ))}
+          </div>
+        </SimpleBar>
       </aside>
+
       <section className="row-span-1  border-2 border-black rd-br-10 bg-#20232b flex overflow-auto">
         <div className="mt-10 ml-100 p-5 rd-t-5 relative flex-1 flex flex-col items-stretch overflow-hidden bg-white dark:bg-#1d1e24">
-          <div className="flex-1 flex flex-col overflow-auto gap-5">
-            {isChatting ? (
-              dialogs.map((dialog, index) => <ChatDialog key={index} dialog={dialog} />)
-            ) : (
-              <div></div>
-            )}
-            <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+          <div className="relative flex-1 flex flex-col overflow-hidden gap-5">
+            <SimpleBar style={{ maxHeight: '100%', padding: '0 10px' }}>
+              {isChatting ? (
+                dialogs.map((dialog, index) => <ChatDialog key={index} dialog={dialog} />)
+              ) : (
+                <div></div>
+              )}
+              <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
+            </SimpleBar>
           </div>
           <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 md:border-transparent md:dark:border-transparent dark:border-white/20 bg-transparent  bg-gradient-linear-[(180deg,rgba(53,55,64,0),#fff_58.85%)] dark:bg-gradient-linear-[(180deg,rgba(53,55,64,0),#20232b_58.85%)]">
             <form className="flex gap-3 pt-30 w-3xl mx-auto my-10">
@@ -277,7 +283,7 @@ export default function ChatGpt() {
           <button
             className="i-carbon-new-tab text-10 text-white absolute bottom-0 right-0 mr-10 mb-10"
             onClick={() => {
-              createNewChat;
+              createNewChat();
             }}
           ></button>
         </div>

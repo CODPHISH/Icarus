@@ -10,10 +10,10 @@ const openai = new OpenAIApi(configuration);
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data } = await openai.listModels({
     httpsAgent: tunnel.httpsOverHttp({
-      // proxy: {
-      //   host: '127.0.0.1',
-      //   port: 10809
-      // }
+      proxy: {
+        host: '127.0.0.1',
+        port: 10809
+      }
     })
   });
 
