@@ -90,7 +90,7 @@ export default function ChatGpt() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ apiKey, messages })
+        body: JSON.stringify({ apiKey: auth ? apiKey : '', messages })
       });
 
       const reader = response.body!.getReader();

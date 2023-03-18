@@ -63,17 +63,16 @@ const handler = async (req: Request): Promise<Response> => {
       payload
     );
     return new Response(stream);
-  } else {
-    const payload = {
-      model: 'gpt-3.5-turbo',
-      messages: messages,
-      stream: true,
-      temperature: 1,
-      max_tokens: 4090
-    };
-    const stream = await OpenAIStream(apiKey, payload);
-    return new Response(stream);
   }
+  const payload = {
+    model: 'gpt-3.5-turbo',
+    messages: messages,
+    stream: true,
+    temperature: 1,
+    max_tokens: 2048
+  };
+  const stream = await OpenAIStream(apiKey, payload);
+  return new Response(stream);
 };
 
 export default handler;
