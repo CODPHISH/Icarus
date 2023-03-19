@@ -3,7 +3,7 @@ import 'highlight.js/styles/atom-one-dark.css';
 import 'simplebar-react/dist/simplebar.min.css';
 import '@/styles/scrollbar.css';
 
-import { t, Trans } from '@lingui/macro';
+import { t } from '@lingui/macro';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
@@ -21,7 +21,7 @@ type Dialog = {
 export default function ChatGpt() {
   const [inputValue, setInputValue] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [apiKey, setApiKey] = useState('');
+
   const [models, setModels] = useState([]);
   const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
 
@@ -32,7 +32,8 @@ export default function ChatGpt() {
 
   const [content, setContent] = useState('');
 
-  const [auth, setAuth] = useState(false);
+  const location = useLocation();
+  const { apiKey } = location.state || {};
 
   useEffect(() => {
     fetchModelList();
@@ -73,11 +74,8 @@ export default function ChatGpt() {
 
   const fetchModelList = async () => {
     try {
-      const response = await fetch('/api/model', {
-        method: 'GET'
-      });
-      const { data } = await response.json();
-      setModels(data);
+      const { data } = await axios.get('/api/model', { params: { apiKey } });
+      setModels(data.data);
     } catch (e) {
       console.error(e);
     }
@@ -90,7 +88,7 @@ export default function ChatGpt() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ apiKey: auth ? apiKey : '', messages })
+        body: JSON.stringify({ apiKey, messages })
       });
 
       const reader = response.body!.getReader();
@@ -118,25 +116,13 @@ export default function ChatGpt() {
     }
   };
 
-  const handleVerify = async () => {
-    if (apiKey) {
-      axios.get('/api/verify', { params: { apiKey } }).then((res) => {
-        if (res.data.code === 200) {
-          setAuth(true);
-        } else {
-          alert('API-KEY无效');
-        }
-      });
-    }
-  };
-
   const handleModelClick = (model: string) => {
     setCurrentModel(model);
   };
 
   const ChatDialog = ({ dialog }: { dialog: Dialog }) => {
     return dialog.role === 'user' ? (
-      <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-start self-start mx-auto">
+      <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-end self-end mx-auto">
         <div className="i-carbon-user-avatar my-2"></div>
         <div className="flex-1 text-left overflow-auto bg-#b785f5 rd-2 rd-tl-0 p-2">
           <ReactMarkdown
@@ -149,7 +135,7 @@ export default function ChatGpt() {
         </div>
       </div>
     ) : (
-      <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-end self-end mx-auto">
+      <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-start self-start mx-auto">
         <div className="i-carbon-chat-bot my-2"></div>
         <div className="flex-1 text-left overflow-auto bg-gray/10 dark:bg-#16171b rd-2 rd-tr-0 p-2">
           <ReactMarkdown
@@ -254,51 +240,7 @@ export default function ChatGpt() {
           </div>
         </div>
 
-        <div className="flex flex-col">
-          <div className="w-80 bg-#5852d6 mt-10 mx-5 rd-5 text-white">
-            <div className="i-carbon-campsite text-4xl inline-block mt-5" />
-            <p>
-              <span>Discovering the Uncharted</span>
-            </p>
-            <p>
-              <em className="text-sm op75">
-                <Trans>Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom</Trans>
-              </em>
-            </p>
-            <div className="py-4" />
-            {auth ? (
-              <em className="text-green">{'已认证'}</em>
-            ) : (
-              <input
-                id="input"
-                placeholder={t`What's your API-KEY?`}
-                type="text"
-                autoComplete="false"
-                className="px-4 py-2 w-250px text-center bg-transparent outline-none active:outline-none"
-                border="~ rounded gray-200 dark:gray-700"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                onKeyDown={({ key }) => key === 'Enter' && handleVerify()}
-              />
-            )}
-
-            <div>
-              {auth ? (
-                <button className="m-5 text-sm btn" onClick={() => setAuth(false)}>
-                  <Trans>更换API-KEY</Trans>
-                </button>
-              ) : (
-                <button
-                  className="m-5 text-sm btn"
-                  disabled={!apiKey}
-                  onClick={() => handleVerify()}
-                >
-                  <Trans>Go</Trans>
-                </button>
-              )}
-            </div>
-          </div>
-
+        <div className="flex flex-col w-80">
           <button
             className="i-carbon-new-tab text-10 text-white absolute bottom-0 right-0 mr-10 mb-10"
             onClick={() => {
