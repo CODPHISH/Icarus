@@ -55,7 +55,7 @@ const handler = async (req: Request): Promise<Response> => {
     messages: messages.slice(Math.max(messages.length - 0, 0)),
     stream: true,
     temperature: 1,
-    max_tokens: 2048
+    max_tokens: 4090
   };
   const stream = await OpenAIStream(apiKey, payload);
   return new Response(stream);
