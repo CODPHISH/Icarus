@@ -178,16 +178,16 @@ export default function ChatGpt() {
 
   return (
     <div
-      className="grid grid-cols-2 grid-rows-2 gap-0 absolute top-0 right-0 bottom-0 left-0 m-10"
-      style={{ gridTemplateRows: '100px auto', gridTemplateColumns: '300px auto' }}
+      className="grid grid-cols-2 grid-rows-2 gap-0 absolute top-0 right-0 bottom-0 left-0 sm:m-10"
+      style={{ gridTemplateRows: '10% auto', gridTemplateColumns: '300px auto' }}
     >
-      <header className="col-span-2 flex bg-#20232b rd-t-10 flex items-center">
+      <header className="col-span-2 flex bg-#20232b sm:rd-t-10 flex items-center">
         <div className="text-6 ml-10">
           <span className="text-gray">Cod</span>
           <span className="text-white">GPT</span>
         </div>
         <button
-          className="icon-btn ml-auto mr-10 text-white text-6"
+          className="icon-btn mr-10 text-white text-6 ml-auto"
           title={t`Toggle dark mode`}
           onClick={() => toggleDark()}
         >
@@ -195,7 +195,7 @@ export default function ChatGpt() {
         </button>
       </header>
 
-      <aside className="relative row-span-1 bg-#000 text-white rd-bl-10 overflow-hidden">
+      <aside className="relative row-span-1 bg-#000 text-white sm:rd-bl-10 overflow-hidden hidden sm:block">
         <SimpleBar style={{ maxHeight: '100%' }}>
           <div className="flex flex-col gap-10 my-10">
             {models.map((model, index) => (
@@ -205,9 +205,9 @@ export default function ChatGpt() {
         </SimpleBar>
       </aside>
 
-      <section className="row-span-1  border-2 border-black rd-br-10 bg-#20232b flex overflow-auto">
-        <div className="mt-10 w-100"></div>
-        <div className="mt-10 p-5 rd-t-5 relative flex-1 flex flex-col items-stretch overflow-hidden bg-white dark:bg-#1d1e24">
+      <section className="row-span-1 col-span-2 sm:col-span-1 border-2 border-black sm:rd-br-10 bg-#20232b flex overflow-auto">
+        <div className="sm:mt-10 sm:ml-5 max-w-100"></div>
+        <div className="sm:mt-10 p-5 sm:rd-t-5 relative flex-1 flex flex-col items-stretch overflow-hidden bg-white dark:bg-#1d1e24">
           <div className="relative flex-1 flex flex-col overflow-hidden gap-5">
             <SimpleBar style={{ maxHeight: '100%', padding: '0 10px' }}>
               {isChatting ? (
@@ -218,9 +218,15 @@ export default function ChatGpt() {
               <div className="w-full h-32 md:h-48 flex-shrink-0"></div>
             </SimpleBar>
           </div>
-          <div className="absolute bottom-0 left-0 w-full border-t md:border-t-0 md:border-transparent md:dark:border-transparent dark:border-white/20 bg-transparent  bg-gradient-linear-[(180deg,rgba(53,55,64,0),#fff_58.85%)] dark:bg-gradient-linear-[(180deg,rgba(53,55,64,0),#20232b_58.85%)]">
-            <form className="flex gap-3 pt-30 w-3xl mx-auto my-10">
-              <div className="relative flex flex-col flex-grow w-full py-3 pl-2 border border-black/10 dark:border-gray-900/50 dark:text-white dark:bg-#40414f rounded-md shadow-md">
+          <div className="absolute bottom-0 left-0 w-full border-t-0 border-transparent dark:border-white/20 bg-transparent  bg-gradient-linear-[(180deg,rgba(53,55,64,0),#fff_58.85%)] dark:bg-gradient-linear-[(180deg,rgba(53,55,64,0),#20232b_58.85%)]">
+            <form className="flex gap-2 pt-30 sm:max-w-3xl mx-auto my-10">
+              <button
+                className="i-carbon-text-clear-format text-6 text-black self-end ml-5 mb-2 dark:text-white"
+                onClick={() => {
+                  createNewChat();
+                }}
+              ></button>
+              <div className="relative flex flex-col flex-grow w-full mr-5 py-3 pl-2 border border-black/10 dark:border-gray-900/50 dark:text-white dark:bg-#40414f rd-10 shadow-md">
                 <textarea
                   ref={textareaRef}
                   value={inputValue}
@@ -233,21 +239,14 @@ export default function ChatGpt() {
                 ></textarea>
                 <button
                   onClick={(e) => handleSubmit(e)}
-                  className="i-carbon-send-alt absolute p-1 text-gray-500 bottom-3 right-2 hover:text-black hover:cursor-pointer"
+                  className="i-carbon-send-alt absolute p-1 text-purple bottom-3 right-3 hover:text-black hover:cursor-pointer"
                 ></button>
               </div>
             </form>
           </div>
         </div>
 
-        <div className="flex flex-col w-80">
-          <button
-            className="i-carbon-new-tab text-10 text-white absolute bottom-0 right-0 mr-10 mb-10"
-            onClick={() => {
-              createNewChat();
-            }}
-          ></button>
-        </div>
+        <div className="flex flex-col max-w-80 sm:mt-10 sm:mr-5"></div>
       </section>
     </div>
   );
