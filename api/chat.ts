@@ -49,13 +49,12 @@ async function OpenAIStream(apiKey: string, payload: any) {
 
 const handler = async (req: Request): Promise<Response> => {
   const { apiKey, messages } = await req.json();
-
   const payload = {
     model: 'gpt-3.5-turbo',
-    messages: messages.slice(Math.max(messages.length - 0, 0)),
+    messages: messages,
     stream: true,
     temperature: 1,
-    max_tokens: 2000
+    max_tokens: 1024
   };
   const stream = await OpenAIStream(apiKey, payload);
   return new Response(stream);
