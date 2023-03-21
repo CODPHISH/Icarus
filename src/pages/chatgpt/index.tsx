@@ -172,7 +172,8 @@ export default function ChatGpt() {
     );
   };
 
-  const createNewChat = () => {
+  const handleClear = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
     setDialogs([]);
   };
 
@@ -222,8 +223,8 @@ export default function ChatGpt() {
             <form className="flex gap-2 pt-30 sm:max-w-3xl mx-auto my-10">
               <button
                 className="i-carbon-text-clear-format text-6 text-black self-end ml-5 mb-2 dark:text-white"
-                onClick={() => {
-                  createNewChat();
+                onClick={(e) => {
+                  handleClear(e);
                 }}
               ></button>
               <div className="relative flex flex-col flex-grow w-full mr-5 py-3 pl-2 border border-black/10 dark:border-gray-900/50 dark:text-white dark:bg-#40414f rd-10 shadow-md">
