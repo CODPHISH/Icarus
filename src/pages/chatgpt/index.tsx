@@ -36,8 +36,12 @@ export default function ChatGpt() {
   const { apiKey } = location.state || {};
 
   useEffect(() => {
-    fetchModelList();
-  }, []);
+    const fetchData = async () => {
+      const models = await fetchModelList({ apiKey: apiKey });
+      setModels(models);
+    };
+    fetchData();
+  }, [apiKey]);
 
   useLayoutEffect(() => {
     const textareaDom = textareaRef.current!;
@@ -54,10 +58,32 @@ export default function ChatGpt() {
   }, [dialogs]);
 
   useEffect(() => {
+    let reader: ReadableStreamDefaultReader<Uint8Array>;
+    const fetchData = async () => {
+      const response = await fetchChatCompletion({ apiKey: apiKey, messages: dialogs });
+      reader = response?.data.getReader();
+      const decoder = new TextDecoder('utf-8');
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          setContent('');
+          break;
+        }
+        if (value) {
+          setContent((prev) => prev + decoder.decode(value));
+        }
+      }
+    };
+
     if (dialogs[dialogs.length - 1]?.role === 'user') {
-      fetchChatCompletion(dialogs);
+      fetchData();
     }
-  }, [dialogs]);
+
+    return () => {
+      reader.cancel();
+    };
+  }, [apiKey, dialogs]);
 
   useEffect(() => {
     if (content) {
@@ -72,37 +98,24 @@ export default function ChatGpt() {
     }
   }, [content]);
 
-  const fetchModelList = async () => {
+  const fetchModelList = async (params: { apiKey: string }) => {
     try {
-      const { data } = await axios.get('/api/model', { params: { apiKey } });
-      setModels(data.data);
+      const { data } = await axios.get('/api/model', { params });
+      return data.data;
     } catch (e) {
       console.error(e);
+      return [];
     }
   };
 
-  const fetchChatCompletion = async (messages: Dialog[]) => {
+  const fetchChatCompletion = async (params: { apiKey: string; messages: Dialog[] }) => {
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ apiKey, messages })
+      const response = await axios.post('/api/chat', {
+        data: params,
+        responseType: 'stream'
       });
 
-      const reader = response.body!.getReader();
-      const decoder = new TextDecoder('utf-8');
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          setContent('');
-          break;
-        }
-        if (value) {
-          setContent((prev) => prev + decoder.decode(value));
-        }
-      }
+      return response;
     } catch (e) {
       console.error(e);
     }
