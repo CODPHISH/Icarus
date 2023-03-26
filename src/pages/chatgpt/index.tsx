@@ -58,31 +58,37 @@ export default function ChatGpt() {
   }, [dialogs]);
 
   useEffect(() => {
-    let reader: ReadableStreamDefaultReader<Uint8Array>;
+    let stream: any;
     const fetchData = async () => {
       const response = await fetchChatCompletion({ apiKey: apiKey, messages: dialogs });
-      reader = response?.data.getReader();
+      stream = response?.data;
       const decoder = new TextDecoder('utf-8');
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          setContent('');
-          break;
-        }
-        if (value) {
-          setContent((prev) => prev + decoder.decode(value));
-        }
+      for (const chunk of stream.read) {
+        setContent((prev) => prev + decoder.decode(chunk));
       }
+
+      setContent('');
+
+      // while (true) {
+      //   const { done, value } = await reader.read();
+      //   if (done) {
+      //     setContent('');
+      //     break;
+      //   }
+      //   if (value) {
+      //     setContent((prev) => prev + decoder.decode(value));
+      //   }
+      // }
     };
 
     if (dialogs[dialogs.length - 1]?.role === 'user') {
       fetchData();
     }
 
-    return () => {
-      reader.cancel();
-    };
+    // return () => {
+    //   reader && reader.cancel();
+    // };
   }, [apiKey, dialogs]);
 
   useEffect(() => {
@@ -110,11 +116,15 @@ export default function ChatGpt() {
 
   const fetchChatCompletion = async (params: { apiKey: string; messages: Dialog[] }) => {
     try {
-      const response = await axios.post('/api/chat', {
-        data: params,
-        responseType: 'stream'
-      });
-
+      const response = await axios.post(
+        '/api/chat',
+        {
+          params
+        },
+        {
+          responseType: 'stream'
+        }
+      );
       return response;
     } catch (e) {
       console.error(e);
