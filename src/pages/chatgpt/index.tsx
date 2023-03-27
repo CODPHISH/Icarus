@@ -4,7 +4,6 @@ import 'simplebar-react/dist/simplebar.min.css';
 import '@/styles/scrollbar.css';
 
 import { t } from '@lingui/macro';
-import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
@@ -13,83 +12,25 @@ import SimpleBar from 'simplebar-react';
 
 import { useDark } from '@/hooks';
 
-type Dialog = {
-  role: 'user' | 'assistant';
-  content: string;
-};
+import { useChatStatus } from './hooks/useChatStatus';
+import { useMessageContent } from './hooks/useMessageContent';
+import { useModels } from './hooks/useModels';
+import { useTextareaAutoHeight } from './hooks/useTextareaAutoHeight';
 
 export default function ChatGpt() {
-  const [inputValue, setInputValue] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const [models, setModels] = useState([]);
-  const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
+  const { inputValue, setInputValue, textareaRef } = useTextareaAutoHeight();
 
   const { isDark, toggleDark } = useDark();
-
-  const [isChatting, setIsChatting] = useState(false);
-  const [dialogs, setDialogs] = useState<Dialog[]>([]);
-
-  const [content, setContent] = useState('');
-
   const location = useLocation();
   const { apiKey } = location.state || {};
+  const { models } = useModels(apiKey);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const models = await fetchModelList({ apiKey: apiKey });
-      setModels(models);
-    };
-    fetchData();
-  }, [apiKey]);
+  const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
 
-  useLayoutEffect(() => {
-    const textareaDom = textareaRef.current!;
-    textareaDom.style.height = '24px';
-    textareaDom.style.height = textareaDom.scrollHeight + 'px';
-  }, [inputValue]);
+  const [dialogs, setDialogs] = useState<Dialog[]>([]);
+  const { isChatting } = useChatStatus(dialogs);
 
-  useEffect(() => {
-    if (dialogs.length > 0) {
-      setIsChatting(true);
-    } else {
-      setIsChatting(false);
-    }
-  }, [dialogs]);
-
-  useEffect(() => {
-    let stream: any;
-    const fetchData = async () => {
-      const response = await fetchChatCompletion({ apiKey: apiKey, messages: dialogs });
-      stream = response?.data;
-      const decoder = new TextDecoder('utf-8');
-
-      for (const chunk of stream.read) {
-        setContent((prev) => prev + decoder.decode(chunk));
-      }
-
-      setContent('');
-
-      // while (true) {
-      //   const { done, value } = await reader.read();
-      //   if (done) {
-      //     setContent('');
-      //     break;
-      //   }
-      //   if (value) {
-      //     setContent((prev) => prev + decoder.decode(value));
-      //   }
-      // }
-    };
-
-    if (dialogs[dialogs.length - 1]?.role === 'user') {
-      fetchData();
-    }
-
-    // return () => {
-    //   reader && reader.cancel();
-    // };
-  }, [apiKey, dialogs]);
+  const { content } = useMessageContent(apiKey, dialogs);
 
   useEffect(() => {
     if (content) {
@@ -103,33 +44,6 @@ export default function ChatGpt() {
       });
     }
   }, [content]);
-
-  const fetchModelList = async (params: { apiKey: string }) => {
-    try {
-      const { data } = await axios.get('/api/model', { params });
-      return data.data;
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
-  };
-
-  const fetchChatCompletion = async (params: { apiKey: string; messages: Dialog[] }) => {
-    try {
-      const response = await axios.post(
-        '/api/chat',
-        {
-          params
-        },
-        {
-          responseType: 'stream'
-        }
-      );
-      return response;
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
