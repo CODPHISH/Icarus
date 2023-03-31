@@ -9,6 +9,7 @@ import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import remarkToc from 'remark-toc';
 import SimpleBar from 'simplebar-react';
+import vue from 'vue-highlight.js/lib/languages/vue';
 
 import { useDark } from '@/hooks';
 
@@ -78,7 +79,7 @@ export default function ChatGpt() {
           <ReactMarkdown
             className="markdown"
             remarkPlugins={[remarkGfm, remarkToc]}
-            rehypePlugins={[rehypeHighlight]}
+            rehypePlugins={[[rehypeHighlight, { languages: { vue } }]]}
           >
             {dialog.content}
           </ReactMarkdown>

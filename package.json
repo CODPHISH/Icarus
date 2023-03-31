@@ -36,7 +36,8 @@
     "three": "^0.149.0",
     "ts-node": "^10.0.0",
     "tunnel": "^0.0.6",
-    "usehooks-ts": "^2.6.0"
+    "usehooks-ts": "^2.6.0",
+    "vue-highlight.js": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
