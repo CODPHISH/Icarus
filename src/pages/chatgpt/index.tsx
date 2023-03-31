@@ -4,7 +4,6 @@ import 'simplebar-react/dist/simplebar.min.css';
 import '@/styles/scrollbar.css';
 
 import { t } from '@lingui/macro';
-import vue from 'highlight.js/lib/languages/vue';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
