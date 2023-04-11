@@ -23,7 +23,16 @@ export default function ChatGpt() {
 
   const { isDark, toggleDark } = useDark();
   const location = useLocation();
+
   const { apiKey } = location.state || {};
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!apiKey) {
+      navigate('/');
+    }
+  }, []);
+
   const { models } = useModels(apiKey);
 
   const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
@@ -62,7 +71,7 @@ export default function ChatGpt() {
     return dialog.role === 'user' ? (
       <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-end self-end mx-auto">
         <div className="i-carbon-user-avatar my-2"></div>
-        <div className="flex-1 text-left overflow-auto bg-#b785f5 rd-2 rd-tr-0 p-2">
+        <div className="flex-1 text-left overflow-auto bg-#b785f5 rd-2 rd-tr-0 p-2 max-w-9/10">
           <ReactMarkdown
             className="markdown"
             remarkPlugins={[remarkGfm, remarkToc]}
@@ -75,7 +84,7 @@ export default function ChatGpt() {
     ) : (
       <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-start self-start mx-auto">
         <div className="i-carbon-chat-bot my-2"></div>
-        <div className="flex-1 text-left overflow-auto bg-gray/10 dark:bg-#16171b rd-2 rd-tl-0 p-2">
+        <div className="flex-1 text-left overflow-auto bg-gray/10 dark:bg-#16171b rd-2 rd-tl-0 p-2 max-w-9/10">
           <ReactMarkdown
             className="markdown"
             remarkPlugins={[remarkGfm, remarkToc]}
