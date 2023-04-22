@@ -4,92 +4,43 @@ import 'simplebar-react/dist/simplebar.min.css';
 import '@/styles/scrollbar.css';
 
 import { t } from '@lingui/macro';
-import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
 import remarkToc from 'remark-toc';
 import SimpleBar from 'simplebar-react';
+import vue from 'vue-highlight.js/lib/languages/vue';
 
 import { useDark } from '@/hooks';
 
-type Dialog = {
-  role: 'user' | 'assistant';
-  content: string;
-};
+import { useChatStatus } from './hooks/useChatStatus';
+import { useMessageContent } from './hooks/useMessageContent';
+import { useModels } from './hooks/useModels';
+import { useTextareaAutoHeight } from './hooks/useTextareaAutoHeight';
 
 export default function ChatGpt() {
-  const [inputValue, setInputValue] = useState('');
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const [models, setModels] = useState([]);
-  const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
+  const { inputValue, setInputValue, textareaRef } = useTextareaAutoHeight();
 
   const { isDark, toggleDark } = useDark();
-
-  const [isChatting, setIsChatting] = useState(false);
-  const [dialogs, setDialogs] = useState<Dialog[]>([]);
-
-  const [content, setContent] = useState('');
-
   const location = useLocation();
+
   const { apiKey } = location.state || {};
 
+  const navigate = useNavigate();
   useEffect(() => {
-    const fetchData = async () => {
-      const models = await fetchModelList({ apiKey: apiKey });
-      setModels(models);
-    };
-    fetchData();
-  }, [apiKey]);
-
-  useLayoutEffect(() => {
-    const textareaDom = textareaRef.current!;
-    textareaDom.style.height = '24px';
-    textareaDom.style.height = textareaDom.scrollHeight + 'px';
-  }, [inputValue]);
-
-  useEffect(() => {
-    if (dialogs.length > 0) {
-      setIsChatting(true);
-    } else {
-      setIsChatting(false);
+    if (!apiKey) {
+      navigate('/');
     }
-  }, [dialogs]);
+  }, []);
 
-  useEffect(() => {
-    let stream: any;
-    const fetchData = async () => {
-      const response = await fetchChatCompletion({ apiKey: apiKey, messages: dialogs });
-      stream = response?.data;
-      const decoder = new TextDecoder('utf-8');
+  const { models } = useModels(apiKey);
 
-      for (const chunk of stream.read) {
-        setContent((prev) => prev + decoder.decode(chunk));
-      }
+  const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
 
-      setContent('');
+  const [dialogs, setDialogs] = useState<Dialog[]>([]);
+  const { isChatting } = useChatStatus(dialogs);
 
-      // while (true) {
-      //   const { done, value } = await reader.read();
-      //   if (done) {
-      //     setContent('');
-      //     break;
-      //   }
-      //   if (value) {
-      //     setContent((prev) => prev + decoder.decode(value));
-      //   }
-      // }
-    };
-
-    if (dialogs[dialogs.length - 1]?.role === 'user') {
-      fetchData();
-    }
-
-    // return () => {
-    //   reader && reader.cancel();
-    // };
-  }, [apiKey, dialogs]);
+  const { content } = useMessageContent(apiKey, dialogs);
 
   useEffect(() => {
     if (content) {
@@ -103,33 +54,6 @@ export default function ChatGpt() {
       });
     }
   }, [content]);
-
-  const fetchModelList = async (params: { apiKey: string }) => {
-    try {
-      const { data } = await axios.get('/api/model', { params });
-      return data.data;
-    } catch (e) {
-      console.error(e);
-      return [];
-    }
-  };
-
-  const fetchChatCompletion = async (params: { apiKey: string; messages: Dialog[] }) => {
-    try {
-      const response = await axios.post(
-        '/api/chat',
-        {
-          params
-        },
-        {
-          responseType: 'stream'
-        }
-      );
-      return response;
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -147,7 +71,7 @@ export default function ChatGpt() {
     return dialog.role === 'user' ? (
       <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-end self-end mx-auto">
         <div className="i-carbon-user-avatar my-2"></div>
-        <div className="flex-1 text-left overflow-auto bg-#b785f5 rd-2 rd-tr-0 p-2">
+        <div className="flex-1 text-left overflow-auto bg-#b785f5 rd-2 rd-tr-0 p-2 max-w-9/10">
           <ReactMarkdown
             className="markdown"
             remarkPlugins={[remarkGfm, remarkToc]}
@@ -160,11 +84,11 @@ export default function ChatGpt() {
     ) : (
       <div className="flex flex-col md:max-w-2xl xl:max-w-3xl items-start self-start mx-auto">
         <div className="i-carbon-chat-bot my-2"></div>
-        <div className="flex-1 text-left overflow-auto bg-gray/10 dark:bg-#16171b rd-2 rd-tl-0 p-2">
+        <div className="flex-1 text-left overflow-auto bg-gray/10 dark:bg-#16171b rd-2 rd-tl-0 p-2 max-w-9/10">
           <ReactMarkdown
             className="markdown"
             remarkPlugins={[remarkGfm, remarkToc]}
-            rehypePlugins={[rehypeHighlight]}
+            rehypePlugins={[[rehypeHighlight, { languages: { vue } }]]}
           >
             {dialog.content}
           </ReactMarkdown>
