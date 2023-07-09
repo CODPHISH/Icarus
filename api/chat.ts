@@ -27,7 +27,7 @@ async function OpenAIStream(apiKey: string, payload: any) {
             return;
           }
           try {
-            const content = JSON.parse(data).choices[0].message?.content;
+            const content = JSON.parse(data).choices[0].delta?.content; // 开启stream需要用delta而不是message
             if (!content) {
               return;
             }

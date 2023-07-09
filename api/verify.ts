@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Configuration, OpenAIApi } from 'openai';
-// import * as tunnel from 'tunnel';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const configuration = new Configuration({
@@ -8,14 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   });
   const openai = new OpenAIApi(configuration);
   try {
-    const { status } = await openai.listModels({
-      // httpsAgent: tunnel.httpsOverHttp({
-      //   proxy: {
-      //     host: '127.0.0.1',
-      //     port: 10809
-      //   }
-      // })
-    });
+    const { status } = await openai.listModels();
     res.status(200).json({ code: status });
   } catch (error) {
     res.status(200).json({ code: 0 });
