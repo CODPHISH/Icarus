@@ -35,7 +35,7 @@ specifiers:
   eslint-plugin-react: ^7.30.1
   eslint-plugin-react-hooks: ^4.6.0
   eslint-plugin-simple-import-sort: ^7.0.0
-  eventsource-parser: ^0.1.0
+  eventsource-parser: 1.0.0
   highlight.js: ^11.7.0
   husky: ^8.0.1
   jsdom: ^20.0.0
@@ -83,7 +83,7 @@ dependencies:
   '@types/three': 0.149.0
   '@vercel/node': registry.npmmirror.com/@vercel/node/2.15.3
   axios: 1.3.4
-  eventsource-parser: 0.1.0
+  eventsource-parser: registry.npmmirror.com/eventsource-parser/1.0.0
   highlight.js: 11.7.0
   openai: registry.npmmirror.com/openai/3.3.0
   perfect-scrollbar: 1.5.5
@@ -3208,11 +3208,6 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /eventsource-parser/0.1.0:
-    resolution: {integrity: sha512-M9QjFtEIkwytUarnx113HGmgtk52LSn3jNAtnWKi3V+b9rqSfQeVdLsaD5AG/O4IrGQwmAAHBIsqbmURPTd2rA==}
-    engines: {node: '>=14.18'}
-    dev: false
 
   /execa/5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
@@ -8337,6 +8332,13 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  registry.npmmirror.com/eventsource-parser/1.0.0:
+    resolution: {integrity: sha512-9jgfSCa3dmEme2ES3mPByGXfgZ87VbP97tng1G2nWwWx6bV2nYxm2AWCrbQjXToSe+yYlqaZNtxffR9IeQr95g==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/eventsource-parser/-/eventsource-parser-1.0.0.tgz}
+    name: eventsource-parser
+    version: 1.0.0
+    engines: {node: '>=14.18'}
+    dev: false
 
   registry.npmmirror.com/fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz}
