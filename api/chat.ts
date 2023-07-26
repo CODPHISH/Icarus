@@ -1,3 +1,4 @@
+/* deprecated */
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser';
 
 export const config = {

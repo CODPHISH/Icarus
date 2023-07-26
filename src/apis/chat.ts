@@ -11,7 +11,7 @@ export async function fetchModelList(apiKey: string) {
 
 export async function fetchChatCompletion(apiKey: string, messages: Dialog[]) {
   try {
-    return await fetch('/api/chat', {
+    return await fetch('/api/chat-ai', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
