@@ -1,25 +1,21 @@
-/// <reference types="vitest" />
-
 import react from '@vitejs/plugin-react';
-import path from 'path';
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 import Unocss from 'unocss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
-import LinguiLoader from 'unplugin-lingui-loader/vite';
-import { defineConfig } from 'vite';
 import Pages from 'vite-plugin-pages';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@/': `${path.resolve(__dirname, 'src')}/`
+      '@/': resolve('src/')
     }
   },
   plugins: [
     // https://github.com/antfu/unocss
     // see unocss.config.ts for config
     Unocss(),
-
-    LinguiLoader(),
 
     react({
       babel: { plugins: ['macros'] }
@@ -36,9 +32,9 @@ export default defineConfig({
       dts: true
     })
   ],
-
-  // https://github.com/vitest-dev/vitest
-  test: {
-    environment: 'jsdom'
+  css: {
+    postcss: {
+      plugins: [autoprefixer]
+    }
   }
 });

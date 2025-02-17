@@ -1,4 +1,3 @@
-import { t, Trans } from '@lingui/macro';
 import axios from 'axios';
 
 export default function Index() {
@@ -33,7 +32,7 @@ export default function Index() {
         </p>
         <p>
           <em className="text-sm op75">
-            <Trans>Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom</Trans>
+            <span>Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom</span>
           </em>
         </p>
         <div className="py-4" />
@@ -42,7 +41,7 @@ export default function Index() {
         ) : (
           <input
             id="input"
-            placeholder={t`What's your API-KEY?`}
+            placeholder={`What's your API-KEY?`}
             type="text"
             autoComplete="false"
             className="px-4 py-2 w-250px text-center bg-transparent outline-none active:outline-none"
@@ -56,11 +55,11 @@ export default function Index() {
         <div>
           {auth ? (
             <button className="m-5 text-sm btn" onClick={() => setAuth(false)}>
-              <Trans>更换API-KEY</Trans>
+              <span>更换API-KEY</span>
             </button>
           ) : (
             <button className="m-5 text-sm btn" disabled={!apiKey} onClick={() => handleVerify()}>
-              <Trans>Go</Trans>
+              <span>Go</span>
             </button>
           )}
         </div>
