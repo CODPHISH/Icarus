@@ -2,9 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "module": "ESNext",
-    "target": "ES2015",
+    "target": "ESNext",
     "lib": ["DOM", "ESNext"],
     "strict": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "incremental": false,
     "skipLibCheck": true,
@@ -19,7 +20,6 @@
       "vite-plugin-pages/client-react",
     ],
     "paths": {
-      "~/*": ["src/*"],
       "@/*": ["src/*"]
     }
   },

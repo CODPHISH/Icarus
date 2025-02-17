@@ -9,7 +9,7 @@ import autoprefixer from 'autoprefixer';
 export default defineConfig({
   resolve: {
     alias: {
-      '@/': resolve('src/')
+      '@': resolve('src')
     }
   },
   plugins: [
@@ -17,6 +17,7 @@ export default defineConfig({
     // see unocss.config.ts for config
     Unocss(),
 
+    // https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react
     react({
       babel: { plugins: ['macros'] }
     }),

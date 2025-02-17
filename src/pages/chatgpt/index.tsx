@@ -3,7 +3,6 @@ import 'highlight.js/styles/atom-one-dark.css';
 import 'simplebar-react/dist/simplebar.min.css';
 import '@/styles/scrollbar.css';
 
-import { t } from '@lingui/macro';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import remarkGfm from 'remark-gfm';
