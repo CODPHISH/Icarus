@@ -1,10 +1,8 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import tailwindcss from '@tailwindcss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Pages from 'vite-plugin-pages';
-import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   resolve: {
@@ -28,13 +26,6 @@ export default defineConfig({
     AutoImport({
       imports: ['react', 'react-router'],
       dts: true
-    }),
-
-    tailwindcss()
-  ],
-  css: {
-    postcss: {
-      plugins: [autoprefixer]
-    }
-  }
+    })
+  ]
 });
