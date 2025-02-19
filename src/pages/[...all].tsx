@@ -1,5 +1,3 @@
-import { Trans } from '@lingui/macro';
-
 export default function NotFound() {
   const navigate = useNavigate();
 

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router';
 import routes from 'virtual:generated-pages-react';
 
 export default function App() {

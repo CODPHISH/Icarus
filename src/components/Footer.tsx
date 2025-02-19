@@ -1,34 +1,21 @@
-import { i18n } from '@lingui/core';
-import { t } from '@lingui/macro';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { useDark } from '@/hooks';
-import { dynamicActivate } from '@/utils';
 
 export default function Footer() {
   const { isDark, toggleDark } = useDark();
 
-  const toggleLocales = () => {
-    const locales = ['zh', 'en', 'ja'];
-    const locale = locales[(locales.indexOf(i18n.locale) + 1) % locales.length];
-
-    dynamicActivate(locale);
-  };
-
   return (
     <nav className="text-xl mt-6 inline-flex gap-2">
-      <Link className="icon-btn mx-2" title={t`Home`} to="/">
+      <Link className="icon-btn mx-2" title={`Home`} to="/">
         <div className="i-carbon-campsite" />
       </Link>
       <button
         className="icon-btn mx-2 !outline-none"
-        title={t`Toggle dark mode`}
+        title={`Toggle dark mode`}
         onClick={() => toggleDark()}
       >
         {isDark ? <div className="i-carbon-moon" /> : <div className="i-carbon-sun" />}
-      </button>
-      <button className="icon-btn mx-2" title={t`Change languages`} onClick={() => toggleLocales()}>
-        <div className="i-carbon-language" />
       </button>
       <a
         className="icon-btn"

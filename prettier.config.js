@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   // 一行最多 100 字符
   printWidth: 100,
   // 使用 2 个空格缩进
@@ -33,5 +33,6 @@ module.exports = {
   // 根据显示样式决定 html 要不要折行
   htmlWhitespaceSensitivity: 'css',
   // 换行符使用 lf
-  endOfLine: 'lf'
+  endOfLine: 'lf',
+  plugins: ["prettier-plugin-tailwindcss"]
 };

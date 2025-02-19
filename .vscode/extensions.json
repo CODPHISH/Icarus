@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "antfu.vite",
-    "antfu.iconify",
-    "antfu.unocss",
+    "antfu.iconify"
   ]
 }

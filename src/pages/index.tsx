@@ -5,22 +5,23 @@ export default function Index() {
   const [auth, setAuth] = useState(false);
 
   const handleVerify = async () => {
-    if (apiKey) {
-      axios.get('/api/verify', { params: { apiKey } }).then((res) => {
-        if (res.data.code === 200) {
-          setAuth(true);
-          go();
-        } else {
-          alert('API-KEY无效');
-        }
-      });
-    }
+    // if (apiKey) {
+    //   axios.get('/api/verify', { params: { apiKey } }).then((res) => {
+    //     if (res.data.code === 200) {
+    //       setAuth(true);
+    //       go();
+    //     } else {
+    //       alert('密钥无效');
+    //     }
+    //   });
+    // }
+    go();
   };
 
   const navigate = useNavigate();
 
   const go = () => {
-    navigate(`/${encodeURIComponent('chatGpt')}`, { replace: true, state: { apiKey } });
+    navigate(`/${encodeURIComponent('home')}`, { replace: true, state: { apiKey } });
   };
 
   return (
@@ -28,11 +29,11 @@ export default function Index() {
       <div className="w-80 bg-#5852d6 mt-60 mx-auto rd-5 text-white">
         <div className="i-carbon-campsite text-4xl inline-block mt-5" />
         <p>
-          <span>Discovering the Uncharted</span>
+          <span>请输入密钥</span>
         </p>
         <p>
           <em className="text-sm op75">
-            <span>Discovering the Uncharted and Plunging into the Vast Ocean of Wisdom</span>
+            <span>手机号</span>
           </em>
         </p>
         <div className="py-4" />

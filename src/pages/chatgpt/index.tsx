@@ -135,7 +135,7 @@ export default function ChatGpt() {
         </div>
         <button
           className="icon-btn mr-10 text-white text-6 ml-auto"
-          title={t`Toggle dark mode`}
+          title={`Toggle dark mode`}
           onClick={() => toggleDark()}
         >
           {isDark ? <div className="i-carbon-moon" /> : <div className="i-carbon-sun" />}

@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import Unocss from 'unocss/vite';
+import tailwindcss from '@tailwindcss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Pages from 'vite-plugin-pages';
 import autoprefixer from 'autoprefixer';
@@ -13,10 +13,6 @@ export default defineConfig({
     }
   },
   plugins: [
-    // https://github.com/antfu/unocss
-    // see unocss.config.ts for config
-    Unocss(),
-
     // https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react
     react({
       babel: { plugins: ['macros'] }
@@ -24,14 +20,17 @@ export default defineConfig({
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages({
+      dirs: 'src/pages',
       exclude: ['**/components/**/*']
     }),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
-      imports: ['react', 'react-router-dom'],
+      imports: ['react', 'react-router'],
       dts: true
-    })
+    }),
+
+    tailwindcss()
   ],
   css: {
     postcss: {
