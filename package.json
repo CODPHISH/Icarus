@@ -39,6 +39,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.8",
     "@iconify-json/carbon": "^1.2.7",
+    "@iconify/react": "^5.2.0",
     "@svgr/core": "^8.1.0",
     "@types/node": "^22.13.4",
     "@types/react": "^19.0.8",
